@@ -318,8 +318,9 @@
         content.title = params[@"title"];
 
         dialog.content = content;
-        if (self.params[@"frictionlessRequests"] != NULL)
-            [dialog setFrictionlessRequestsEnabled:[self.params[@"frictionlessRequests"] boolValue]];
+        if (params[@"frictionlessRequests"] != NULL)
+            [dialog setFrictionlessRequestsEnabled:[params[@"frictionlessRequests"] boolValue]];
+
         NSLog(@"FACEBOOK : Appel show");
         [dialog show];
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
