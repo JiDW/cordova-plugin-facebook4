@@ -271,6 +271,7 @@
         [dialog show];
         return;
     } else if ([method isEqualToString:@"apprequests"]) {
+        NSLog(@"FACEBOOK : Appel apprequests");
         FBSDKGameRequestDialog *dialog = [[FBSDKGameRequestDialog alloc] init];
         if (![dialog canShow]) {
             CDVPluginResult *pluginResult;
@@ -278,7 +279,7 @@
                             messageAsString:@"Cannot show dialog"];
             return;
         }
-
+        NSLog(@"FACEBOOK : Creation Request Content");
         FBSDKGameRequestContent *content = [[FBSDKGameRequestContent alloc] init];
         NSString *actionType = params[@"actionType"];
         if (!actionType) {
@@ -287,6 +288,7 @@
                                              messageAsString:@"Cannot show dialog"];
             return;
         }
+        NSLog(@"FACEBOOK : Gestion parametres");
         if ([[actionType lowercaseString] isEqualToString:@"askfor"]) {
             content.actionType = FBSDKGameRequestActionTypeAskFor;
         } else if ([[actionType lowercaseString] isEqualToString:@"send"]) {
@@ -295,6 +297,7 @@
             content.actionType = FBSDKGameRequestActionTypeTurn;
         }
 
+        NSLog(@"FACEBOOK : Gestion filtres");
         NSString *filters = params[@"filters"];
         if (!filters) {
             content.filters = FBSDKGameRequestFilterNone;
@@ -304,6 +307,7 @@
             content.filters = FBSDKGameRequestFilterAppNonUsers;
         }
 
+        NSLog(@"FACEBOOK : Gestion contenu");
         content.data = params[@"data"];
         content.message = params[@"message"];
         content.objectID = params[@"objectID"];
@@ -311,8 +315,10 @@
         content.title = params[@"title"];
 
         dialog.content = content;
+        NSLog(@"FACEBOOK : Appel show");
         [dialog show];
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        NSLog(@"FACEBOOK : Envoi du result au delegate");
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
