@@ -281,7 +281,7 @@
         }
         NSLog(@"FACEBOOK : Creation Request Content");
         FBSDKGameRequestContent *content = [[FBSDKGameRequestContent alloc] init];
-        NSString *actionType = params[@"actionType"];
+        NSString *actionType = params[@"action_type"];
         if (!actionType) {
             CDVPluginResult *pluginResult;
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
@@ -310,11 +310,16 @@
         NSLog(@"FACEBOOK : Gestion contenu");
         content.data = params[@"data"];
         content.message = params[@"message"];
-        content.objectID = params[@"objectID"];
-        content.recipients = params[@"to"];
+        content.objectID = params[@"object_id"];
+        if ([params[@"to"] isKindOfClass:[NSArray class]])
+            content.recipients = params[@"to"];
+        else if ([params[@"to"] isKindOfClass:[NSString class]])
+            content.recipients = @[ params[@"to"] ];
         content.title = params[@"title"];
 
         dialog.content = content;
+        if (self.params[@"frictionlessRequests"] != NULL)
+            [dialog setFrictionlessRequestsEnabled:[self.params[@"frictionlessRequests"] boolValue]];
         NSLog(@"FACEBOOK : Appel show");
         [dialog show];
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
